@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <title>Vibe</title>
 </head>
-<body>
+<header>
 <!-- header -->
 <section class="hero is-small is-primary">
     <div class="hero-body">
@@ -20,26 +20,44 @@
             Artists chill here
         </p>
     </div>
+    <!-- Search input box -->
+    <div class="columns is-mobile field has-addons is-gapless">
+        <div class="column is-5 is-offset-one-quarter control">
+    <input class="input is-medium" type="text" placeholder="Choose a Genre!">
+    </div>
+    <div class="select is-success is-size-5">
+        <select class="drop-down-menu">
+          <option>Select dropdown</option>
+          <option>With options</option>
+        </select>
+      </div>
+    </div>
 </section>
 <!-- navigation bar -->
     <nav class="navbar is-primary">
-        <div id="navbarBasicExample" class="navbar-menu">
+        <div id="navbarBasic" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item">
+        <a class="navbar-item">
              Home
-            </a>
-            <a class="navbar-item">
-            Documentation
-            </a>
+        </a>
         <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
             More
-            </a>
-<!-- Search input box -->
-    <input class="input is-medium" type="text" placeholder="Medium input">
-    </nav>
-</body>
-
+        </a>
+</header>
+<!-- Content Box -->
+<div class="box tile is-ancestor">
+    This is a content box! do what you want with me
+    <div class="tile is-parent ">
+        <article class="tile is-child box has-background-danger">
+          <div class="content">
+            <p class="title">Feature Tab</p>
+            <p class="subtitle">With even more content</p>
+            <div class="content">
+          </div>
+        </article>
+      </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="./assets/js/script.js"></script>
 </html>
