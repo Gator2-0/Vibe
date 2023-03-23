@@ -54,8 +54,8 @@ function getToken(){
 
 
 //start
-urlHash = getToken();
-var authToken = urlHash.access_token;
+authToken = getToken();
+
 console.log(authToken);
 
 
