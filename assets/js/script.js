@@ -49,9 +49,14 @@ async function getUniqueArtist() {
   });
   let data = await response.json();
   let tracks = data.tracks.items
-  
-  
   console.log(tracks);
+
+  //get details from the track
+
+  let artist = tracks[0].album.artists[0].name;
+  let album = tracks[0].album.name
+  let image = tracks[0].album.images[1].url
+  
 }
 
 
