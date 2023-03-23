@@ -23,10 +23,10 @@
     <!-- Search input box -->
     <div class="columns is-mobile field has-addons is-gapless">
         <div class="column is-5 is-offset-one-quarter control">
-    <input class="input is-medium" type="text" placeholder="Choose a Genre!">
+    <input class="input is-medium" type="text" placeholder="Choose a Genre!" id="genre-search">
     </div>
     <div class="select is-success is-size-5">
-        <select class="drop-down-menu">
+        <select class="drop-down-menu" id="genre-dropdown">
           <option>Select dropdown</option>
           <option>With options</option>
         </select>
@@ -37,23 +37,30 @@
     <nav class="navbar is-primary">
         <div id="navbarBasic" class="navbar-menu">
         <div class="navbar-start">
-        <a class="navbar-item">
+        <a class="navbar-item" id="home-btn">
              Home
         </a>
         <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
+        <a class="navbar-link"  id="more-btn">
             More
         </a>
 </header>
+<!-- Main body of text -->
 <!-- Content Box -->
-<div class="box tile is-ancestor">
-    This is a content box! do what you want with me
-    <div class="tile is-parent ">
-        <article class="tile is-child box has-background-danger">
+<div class="box tile is-ancestor"> 
+    <!-- Main content box -->
+    <article class="tile is-child box" id="genre-main-content">
+        main content
+    </article>
+    <div class="tile is-parent">
+        <article class="tile is-child box has-background-danger is-size-5">
           <div class="content">
-            <p class="title">Feature Tab</p>
-            <p class="subtitle">With even more content</p>
-            <div class="content">
+            <!-- Feature Artist Heading -->
+            <p class="title" id="feature-artist-title">Feature Tab</p>
+            <!-- Feature Artist Content -->
+            <p class="subtitle" id="feature-artist-info">With even more content</p>
+            <!-- Feature Artist image/content -->
+            <div class="content" id="feature-artist-img">
           </div>
         </article>
       </div>
