@@ -1,5 +1,5 @@
 //Link to the DOM
-let searchBar = $(".genre-search");
+let searchBar = $("#genre-search");
 
 //Get authentification Token from Spotify
 const client_id = 'bb72931649ec425d94a20764ae59cb49';
@@ -39,23 +39,27 @@ function getToken(){
 
 
 //unique artist functionality
-async function getUniqueArtist() {
+
+
+async function getUniqueArtist(genre) {
   
-  let response = await fetch('https://api.spotify.com/v1/search/?q=genre:country&type=track&offset=300', {
+  $('#feature-artist-title').children().remove();
+
+  let response = await fetch('https://api.spotify.com/v1/search/?q=genre:'+genre+'&type=track&offset=300', {
     headers: {
       'Authorization': 'Bearer '+ authToken,
       'Content-Type': 'application/json'
     }
   });
   let data = await response.json();
-  let tracks = data.tracks.items
-  console.log(tracks);
-
+  let tracksArray = data.tracks.items
+  let track = tracksArray[Math.floor(Math.random()*tracksArray.length)];
+  console.log(track);
   //get details from the track
 
-  let artist = $("<p>").text(tracks[0].album.artists[0].name);
-  let album = $("<p>").text(tracks[0].album.name);
-  let image = $("<img>").attr('src',tracks[0].album.images[1].url) ;
+  let artist = $("<p>").text(track.album.artists[0].name);
+  let album = $("<p>").text(track.album.name);
+  let image = $("<img>").attr('src',track.album.images[1].url) ;
   
   $('#feature-artist-title').append(artist,album,image)
 }
@@ -229,4 +233,10 @@ $(function () {
 });
 
 
-searchBar.on('')
+searchBar.on('keypress',function(event){
+  console.log(event.which)
+  if(event.which == 13){
+    console.log(searchBar.val());
+    getUniqueArtist(searchBar.val());
+  }
+})
