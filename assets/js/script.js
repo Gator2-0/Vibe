@@ -1,5 +1,5 @@
 //Link to the DOM
-
+let searchBar = $(".genre-search");
 
 //Get authentification Token from Spotify
 const client_id = 'bb72931649ec425d94a20764ae59cb49';
@@ -53,10 +53,11 @@ async function getUniqueArtist() {
 
   //get details from the track
 
-  let artist = tracks[0].album.artists[0].name;
-  let album = tracks[0].album.name
-  let image = tracks[0].album.images[1].url
+  let artist = $("<p>").text(tracks[0].album.artists[0].name);
+  let album = $("<p>").text(tracks[0].album.name);
+  let image = $("<img>").attr('src',tracks[0].album.images[1].url) ;
   
+  $('#feature-artist-title').append(artist,album,image)
 }
 
 
@@ -76,7 +77,7 @@ async function getUniqueArtist() {
 authToken = getToken();
 console.log(authToken);
 
-getUniqueArtist();
+
 
 //fetch all genres from Spotify
 fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
@@ -226,3 +227,6 @@ $(function () {
     source: genres, 
   });
 });
+
+
+searchBar.on('')
