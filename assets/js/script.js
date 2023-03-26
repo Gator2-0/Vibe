@@ -17,15 +17,25 @@ function getToken(){
   if(!localUrl.includes('#')){
   console.log('The url does not contain a #');
   location.href = url;
+  }else if(checkToken() !== 200){
+    console.log('the token has expired');
+    location.href = url;
   }else{
   console.log('The token is present')
   } 
   var search = location.hash.substring(1);
+  console.log(search);
   var urlHash = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
                    function(key, value) { return key===""?value:decodeURIComponent(value) }):{}
   return urlHash.access_token
 }
 
+async function checkToken(){
+  let response = await fetch('https://api.spotify.com/v1/me');
+  let status = await response.status;
+
+  return status;
+}
 
 // top 10 artist functionality
 
@@ -44,6 +54,9 @@ function getToken(){
 async function getUniqueArtist(genre) {
   
   $('#feature-artist-title').children().remove();
+  $('#feature-artist-title').text('');
+  $('#feature-artist-img').children().remove();
+  $('#feature-artist-info').text('');
 
   let response = await fetch('https://api.spotify.com/v1/search/?q=genre:'+genre+'&type=track&offset=300', {
     headers: {
@@ -61,7 +74,8 @@ async function getUniqueArtist(genre) {
   let album = $("<p>").text(track.album.name);
   let image = $("<img>").attr('src',track.album.images[1].url) ;
   
-  $('#feature-artist-title').append(artist,album,image)
+  $('#feature-artist-title').append(artist,album);
+  $('#feature-artist-img').append(image);
 }
 
 
