@@ -1,5 +1,5 @@
 //Link to the DOM
-let searchBar = $(".genre-search");
+let searchBar = $("#genre-search");
 
 //Get authentification Token from Spotify
 const client_id = 'bb72931649ec425d94a20764ae59cb49';
@@ -21,11 +21,33 @@ function getToken(){
   console.log('The token is present')
   } 
   var search = location.hash.substring(1);
+  console.log(search);
   var urlHash = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
                    function(key, value) { return key===""?value:decodeURIComponent(value) }):{}
   return urlHash.access_token
 }
 
+async function checkToken(){
+  let response = await fetch('https://api.spotify.com/v1/me',{
+    headers: {
+      'Authorization': 'Bearer '+ authToken,
+      'Content-Type': 'application/json'
+    }
+  });
+  let status = await response.status;
+
+  if(status !== 200){
+    console.log('The token has expired. Getting new token now...')
+    location.href = url
+    var search = location.hash.substring(1);
+    console.log(search);
+    var urlHash = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+                   function(key, value) { return key===""?value:decodeURIComponent(value) }):{}
+    return urlHash.access_token
+  }else{
+    console.log('Token is still valid.')
+  }
+}
 
 // top 10 artist functionality
 
@@ -39,25 +61,48 @@ function getToken(){
 
 
 //unique artist functionality
-async function getUniqueArtist() {
+
+
+async function getUniqueArtist(genre) {
   
-  let response = await fetch('https://api.spotify.com/v1/search/?q=genre:country&type=track&offset=300', {
+  $('#feature-artist-title').children().remove();
+  $('#feature-artist-title').text('');
+  $('#feature-artist-img').children().remove();
+  $('#feature-artist-info').text('');
+  let count = 0;
+  let response;
+  while(count <= 3){
+    response = await fetch('https://api.spotify.com/v1/search/?q=genre:'+genre+'&type=track&offset=300', {
     headers: {
       'Authorization': 'Bearer '+ authToken,
       'Content-Type': 'application/json'
     }
   });
-  let data = await response.json();
-  let tracks = data.tracks.items
-  console.log(tracks);
+  if(response.status == 200){
+    console.log('fetch genre status is '+response.status)
+    break;
+  }
+  checkToken();
+  count ++;
+  }
 
+  console.log(response);
+  
+  let data = await response.json();
+  let tracksArray = data.tracks.items
+  let track = tracksArray[Math.floor(Math.random()*tracksArray.length)];
+  console.log(track);
   //get details from the track
 
-  let artist = $("<p>").text(tracks[0].album.artists[0].name);
-  let album = $("<p>").text(tracks[0].album.name);
-  let image = $("<img>").attr('src',tracks[0].album.images[1].url) ;
-  
-  $('#feature-artist-title').append(artist,album,image)
+  let artist = $("<p>").text(track.album.artists[0].name);
+  let album = $("<p>").text(track.album.name);
+  let image = $("<img>").attr('src',track.album.images[1].url) ;
+  let externalUrl = $("<a>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
+  externalUrl.text('Spotify page')
+  console.log(externalUrl)
+  $('#feature-artist-title').append(artist,album);
+  $('#feature-artist-img').append(image);
+  $('#feature-artist-info').append(externalUrl)
 }
 
 
@@ -76,6 +121,7 @@ async function getUniqueArtist() {
 //start
 authToken = getToken();
 console.log(authToken);
+checkToken();
 
 
 
@@ -229,4 +275,10 @@ $(function () {
 });
 
 
-searchBar.on('')
+searchBar.on('keypress',function(event){
+  console.log(event.which)
+  if(event.which == 13){
+    console.log(searchBar.val());
+    getUniqueArtist(searchBar.val());
+  }
+})
