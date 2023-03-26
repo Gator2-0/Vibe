@@ -17,9 +17,6 @@ function getToken(){
   if(!localUrl.includes('#')){
   console.log('The url does not contain a #');
   location.href = url;
-  }else if(checkToken() !== 200){
-    console.log('the token has expired');
-    location.href = url;
   }else{
   console.log('The token is present')
   } 
@@ -31,10 +28,25 @@ function getToken(){
 }
 
 async function checkToken(){
-  let response = await fetch('https://api.spotify.com/v1/me');
+  let response = await fetch('https://api.spotify.com/v1/me',{
+    headers: {
+      'Authorization': 'Bearer '+ authToken,
+      'Content-Type': 'application/json'
+    }
+  });
   let status = await response.status;
 
-  return status;
+  if(status !== 200){
+    console.log('The token has expired. Getting new token now...')
+    location.href = url
+    var search = location.hash.substring(1);
+    console.log(search);
+    var urlHash = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+                   function(key, value) { return key===""?value:decodeURIComponent(value) }):{}
+    return urlHash.access_token
+  }else{
+    console.log('Token is still valid.')
+  }
 }
 
 // top 10 artist functionality
@@ -57,13 +69,25 @@ async function getUniqueArtist(genre) {
   $('#feature-artist-title').text('');
   $('#feature-artist-img').children().remove();
   $('#feature-artist-info').text('');
-
-  let response = await fetch('https://api.spotify.com/v1/search/?q=genre:'+genre+'&type=track&offset=300', {
+  let count = 0;
+  let response;
+  while(count <= 3){
+    response = await fetch('https://api.spotify.com/v1/search/?q=genre:'+genre+'&type=track&offset=300', {
     headers: {
       'Authorization': 'Bearer '+ authToken,
       'Content-Type': 'application/json'
     }
   });
+  if(response.status == 200){
+    console.log('fetch genre status is '+response.status)
+    break;
+  }
+  checkToken();
+  count ++;
+  }
+
+  console.log(response);
+  
   let data = await response.json();
   let tracksArray = data.tracks.items
   let track = tracksArray[Math.floor(Math.random()*tracksArray.length)];
@@ -73,9 +97,12 @@ async function getUniqueArtist(genre) {
   let artist = $("<p>").text(track.album.artists[0].name);
   let album = $("<p>").text(track.album.name);
   let image = $("<img>").attr('src',track.album.images[1].url) ;
-  
+  let externalUrl = $("<a>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
+  externalUrl.text('Spotify page')
+  console.log(externalUrl)
   $('#feature-artist-title').append(artist,album);
   $('#feature-artist-img').append(image);
+  $('#feature-artist-info').append(externalUrl)
 }
 
 
@@ -94,6 +121,7 @@ async function getUniqueArtist(genre) {
 //start
 authToken = getToken();
 console.log(authToken);
+checkToken();
 
 
 
