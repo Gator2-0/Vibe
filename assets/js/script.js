@@ -1,6 +1,5 @@
 //Link to the DOM
 let searchBar = $("#genre-search");
-
 //Get authentification Token from Spotify
 const client_id = 'bb72931649ec425d94a20764ae59cb49';
 const redirect_uri = 'http://127.0.0.1:5500/index.html';
@@ -225,4 +224,9 @@ fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
 
     return genres;
   })
+
+
+    $(window).scroll(function(){
+      $("#feature-artist-box").css({"margin-top": ($(window).scrollTop()) + "px", "margin-left":($(window).scrollLeft()) + "px"});
+    });
 
