@@ -166,8 +166,20 @@ async function getUniqueArtist() {
 
 // Save the artist to local storage as favourite
 
-function toFaourite(){
-  console.log(event)
+function toFavourite(){
+  let par = $($(event.target).parent()).parent();
+  let children =  $(par.children()).children();
+  console.log(children);
+  let card = {
+    genre: $(children[0]).text().split('Artist')[1],
+    band: $(children[1]).text(),
+    album: $(children[2]).text(),
+    link: $(children[3]).prop('href'),
+    image: $(children[5]).prop('src')
+
+  }
+  localStorage.setItem('favouriteArtists', JSON.stringify(card))
+  
 }
 
 
@@ -188,6 +200,7 @@ getGenre();
 // event listener
 $('#genre-dropdown').on("change", getTopArtist);
 $('#genre-dropdown').on("change", getUniqueArtist);
+$("#feature-artist-info").on('click','button', toFavourite);
 
 
 //fetch all genres from Spotify
