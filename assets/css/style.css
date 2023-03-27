@@ -1,6 +1,48 @@
 .ui-helper-hidden-accessible{
     display: none;
 }
-/* .ui-menu-ui-widget-ui-widget-content-ui-autocomplete-ui-front{
-    display: none;
-} */
+img {
+    width: 400px;
+    border-radius: 20px;
+    height: 350px;
+}
+
+#feature-artist-box{
+    max-height: 900px;
+}
+
+#genre-main-content.tile.is-child.box{
+    border: 1px;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: hsl(141, 53%, 53%);
+}
+
+.content{
+    font-family: 'Raleway', sans-serif;
+    padding: 10px;
+}
+
+#search-dropdown{
+    justify-content: center;
+}
+
+.navbar{
+    font-weight: bolder;
+    font-size: large;
+}
+
+/* responsiveness not built-into bulma */
+@media screen and (max-width: 992px) {
+  }
+  
+
+  @media screen and (max-width: 768px) {
+
+  }
+  
+  /* Small smartphones - image placeholders change color */
+  @media screen and (max-width: 576px) {
+    }
+  
+  
