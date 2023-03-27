@@ -1,5 +1,5 @@
 //Link to the DOM
-
+let searchBar = $("#genre-search");
 
 //Get authentification Token from Spotify
 const client_id = 'bb72931649ec425d94a20764ae59cb49';
@@ -21,11 +21,33 @@ function getToken() {
     console.log('The token is present')
   }
   var search = location.hash.substring(1);
-  var urlHash = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-    function (key, value) { return key === "" ? value : decodeURIComponent(value) }) : {}
+  console.log(search);
+  var urlHash = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+                   function(key, value) { return key===""?value:decodeURIComponent(value) }):{}
   return urlHash.access_token
 }
 
+async function checkToken(){
+  let response = await fetch('https://api.spotify.com/v1/me',{
+    headers: {
+      'Authorization': 'Bearer '+ authToken,
+      'Content-Type': 'application/json'
+    }
+  });
+  let status = await response.status;
+
+  if(status !== 200){
+    console.log('The token has expired. Getting new token now...')
+    location.href = url
+    var search = location.hash.substring(1);
+    console.log(search);
+    var urlHash = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+                   function(key, value) { return key===""?value:decodeURIComponent(value) }):{}
+    return urlHash.access_token
+  }else{
+    console.log('Token is still valid.')
+  }
+}
 
 // top 10 artist functionality
 
@@ -97,23 +119,48 @@ async function getTopArtist() {
 
 
 //unique artist functionality
-async function getUniqueArtist() {
 
-  let response = await fetch('https://api.spotify.com/v1/search/?q=genre:country&type=track&offset=300', {
+async function getUniqueArtist(genre) {
+  
+  $('#feature-artist-title').children().remove();
+  $('#feature-artist-title').text('');
+  $('#feature-artist-img').children().remove();
+  $('#feature-artist-info').text('');
+  let count = 0;
+  let response;
+  while(count <= 3){
+    response = await fetch('https://api.spotify.com/v1/search/?q=genre:'+genre+'&type=track&offset=300', {
     headers: {
       'Authorization': 'Bearer ' + authToken,
       'Content-Type': 'application/json'
     }
   });
-  let data = await response.json();
-  let tracks = data.tracks.items
-  console.log(tracks);
+  if(response.status == 200){
+    console.log('fetch genre status is '+response.status)
+    break;
+  }
+  checkToken();
+  count ++;
+  }
 
+  console.log(response);
+  
+  let data = await response.json();
+  let tracksArray = data.tracks.items
+  let track = tracksArray[Math.floor(Math.random()*tracksArray.length)];
+  console.log(track);
   //get details from the track
 
-  let artist = tracks[0].album.artists[0].name;
-  let album = tracks[0].album.name
-  let image = tracks[0].album.images[1].url
+
+  let artist = $("<p>").text(track.album.artists[0].name);
+  let album = $("<p>").text(track.album.name);
+  let image = $("<img>").attr('src',track.album.images[1].url) ;
+  let externalUrl = $("<a>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
+  externalUrl.text('Spotify page')
+  console.log(externalUrl)
+  $('#feature-artist-title').append(artist,album);
+  $('#feature-artist-img').append(image);
+  $('#feature-artist-info').append(externalUrl)
 
 }
 
@@ -133,8 +180,9 @@ async function getUniqueArtist() {
 //start
 authToken = getToken();
 console.log(authToken);
+checkToken();
 
-getUniqueArtist();
+
 
 
 // global array to push genres into from fetch
@@ -191,137 +239,143 @@ fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
   })
 
 
-// Search autocomplete function:
-// this did not always return results correctly and ommitted some items etc..
-// I tried making it a dropdown list instead and that fixed those issues
-// the genre-search element is removed from html so code below is not needed
-// $(function () {
-  // var genres = [
-  //   "acoustic",
-  //   'afrobeat',
-  //   'alt-rock',
-  //   'alternative',
-  //   'ambient',
-  //   'anime',
-  //   'black-metal',
-  //   'bluegrass',
-  //   'blues',
-  //   'bossanova',
-  //   'brazil',
-  //   'breakbeat',
-  //   'british',
-  //   'cantopop',
-  //   'chicago-house',
-  //   'children',
-  //   'chill',
-  //   'classical',
-  //   'club',
-  //   'comedy',
-  //   'country',
-  //   'dance',
-  //   'dancehall',
-  //   'death-metal',
-  //   'deep-house',
-  //   'detroit-techno',
-  //   'disco',
-  //   'drum-and-bass',
-  //   'dub',
-  //   'dubstep',
-  //   'edm',
-  //   'electro',
-  //   'electronic',
-  //   'emo',
-  //   'folk',
-  //   'forro',
-  //   'french',
-  //   'funk',
-  //   'garage',
-  //   'german',
-  //   'gospel',
-  //   'goth',
-  //   'grindcore',
-  //   'groove',
-  //   'grunge',
-  //   'guitar',
-  //   'happy',
-  //   'hard-rock',
-  //   'hardcore',
-  //   'hardstyle',
-  //   'heavy-metal',
-  //   'hip-hop',
-  //   'holidays',
-  //   'honky-tonk',
-  //   'house',
-  //   'idm',
-  //   'indian',
-  //   'indie',
-  //   'indie-pop',
-  //   'industrial',
-  //   'iranian',
-  //   'j-dance',
-  //   'j-idol',
-  //   'j-pop',
-  //   'j-rock',
-  //   'jazz',
-  //   'kids',
-  //   'latin',
-  //   'latino',
-  //   'malay',
-  //   'mandopop',
-  //   'metal',
-  //   'metal-misc',
-  //   'metalcore',
-  //   'minimal-techno',
-  //   'movies',
-  //   'mpb',
-  //   'new-age',
-  //   'new-release',
-  //   'opera',
-  //   'pagode',
-  //   'philippines-opm',
-  //   'piano',
-  //   'pop',
-  //   'pop-film',
-  //   'post-dubstep',
-  //   'power-pop',
-  //   'progressive-house',
-  //   'psych-rock',
-  //   'punk',
-  //   'punk-rock',
-  //   'r-n-b',
-  //   'rainy-day',
-  //   'reggae',
-  //   'reggaeton',
-  //   'road-trip',
-  //   'rock',
-  //   'rock-n-roll',
-  //   'rockabilly',
-  //   'romance',
-  //   'sad',
-  //   'salsa',
-  //   'samba',
-  //   'sertanejo',
-  //   'show-tunes',
-  //   'singer-songwriter',
-  //   'ska',
-  //   'sleep',
-  //   'songwriter',
-  //   'soul',
-  //   'soundtracks',
-  //   'spanish',
-  //   'study',
-  //   'summer',
-  //   'swedish',
-  //   'synth-pop',
-  //   'tango',
-  //   'techno',
-  //   'trance',
-  //   'trip-hop',
-  //   'turkish',
-  //   'work-out',
-  //   'world-music',
-  // ];
-//   $('#genre-search').autocomplete({
-//     source: genres,
-//   });
-// });
+$(function () {
+  var genres = [
+    "acoustic",
+    'afrobeat',
+    'alt-rock',
+    'alternative',
+    'ambient',
+    'anime',
+    'black-metal',
+    'bluegrass',
+    'blues',
+    'bossanova',
+    'brazil',
+    'breakbeat',
+    'british',
+    'cantopop',
+    'chicago-house',
+    'children',
+    'chill',
+    'classical',
+    'club',
+    'comedy',
+    'country',
+    'dance',
+    'dancehall',
+    'death-metal',
+    'deep-house',
+    'detroit-techno',
+    'disco',
+    'drum-and-bass',
+    'dub',
+    'dubstep',
+    'edm',
+    'electro',
+    'electronic',
+    'emo',
+    'folk',
+    'forro',
+    'french',
+    'funk',
+    'garage',
+    'german',
+    'gospel',
+    'goth',
+    'grindcore',
+    'groove',
+    'grunge',
+    'guitar',
+    'happy',
+    'hard-rock',
+    'hardcore',
+    'hardstyle',
+    'heavy-metal',
+    'hip-hop',
+    'holidays',
+    'honky-tonk',
+    'house',
+    'idm',
+    'indian',
+    'indie',
+    'indie-pop',
+    'industrial',
+    'iranian',
+    'j-dance',
+    'j-idol',
+    'j-pop',
+    'j-rock',
+    'jazz',
+    'kids',
+    'latin',
+    'latino',
+    'malay',
+    'mandopop',
+    'metal',
+    'metal-misc',
+    'metalcore',
+    'minimal-techno',
+    'movies',
+    'mpb',
+    'new-age',
+    'new-release',
+    'opera',
+    'pagode',
+    'philippines-opm',
+    'piano',
+    'pop',
+    'pop-film',
+    'post-dubstep',
+    'power-pop',
+    'progressive-house',
+    'psych-rock',
+    'punk',
+    'punk-rock',
+    'r-n-b',
+    'rainy-day',
+    'reggae',
+    'reggaeton',
+    'road-trip',
+    'rock',
+    'rock-n-roll',
+    'rockabilly',
+    'romance',
+    'sad',
+    'salsa',
+    'samba',
+    'sertanejo',
+    'show-tunes',
+    'singer-songwriter',
+    'ska',
+    'sleep',
+    'songwriter',
+    'soul',
+    'soundtracks',
+    'spanish',
+    'study',
+    'summer',
+    'swedish',
+    'synth-pop',
+    'tango',
+    'techno',
+    'trance',
+    'trip-hop',
+    'turkish',
+    'work-out',
+    'world-music',
+  ];
+  $('#genre-search').autocomplete({
+    source: genres, 
+  });
+});
+
+
+searchBar.on('keypress',function(event){
+  console.log(event.which)
+  if(event.which == 13){
+    console.log(searchBar.val());
+    getUniqueArtist(searchBar.val());
+  }
+})
+
