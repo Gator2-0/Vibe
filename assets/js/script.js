@@ -129,7 +129,7 @@ async function getUniqueArtist() {
       'Authorization': 'Bearer ' + authToken,
       'Content-Type': 'application/json'
     }
-  });
+    });
   if(response.status == 200){
     console.log('fetch genre status is '+response.status)
     break;
@@ -155,11 +155,19 @@ async function getUniqueArtist() {
   let image = $("<img>").attr('src',track.album.images[0].url) ;
   let externalUrl = $("<a class='subtitle'>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
   externalUrl.text('Spotify page')
-  console.log(externalUrl)
+  let saveButton = $("<button>").addClass('button');
+  saveButton.text('Save to my favourite');
+
   $('#feature-artist-title').append(artist,album);
   $('#feature-artist-img').append(image);
-  $('#feature-artist-info').append(externalUrl)
+  $('#feature-artist-info').append(externalUrl,saveButton)
 
+}
+
+// Save the artist to local storage as favourite
+
+function toFaourite(){
+  console.log(event)
 }
 
 
@@ -175,54 +183,64 @@ checkToken();
 
 // global array to push genres into from fetch
 var genres = [];
+getGenre();
 
-// event listener for top artists
+// event listener
 $('#genre-dropdown').on("change", getTopArtist);
 $('#genre-dropdown').on("change", getUniqueArtist);
 
 
 //fetch all genres from Spotify
-fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
 
-  headers: {
-    'Authorization': 'Bearer ' + authToken,
-    'Content-Type': 'application/json',
+async function getGenre(){
+  let count = 0;
+  let response;
+
+  while(count < 3){
+    response = await fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
+    headers: {
+      'Authorization': 'Bearer ' + authToken,
+      'Content-Type': 'application/json',
+    }
+    })
+    if(response.status == 200){
+      console.log('token does not need to be refreshed.');
+      break;
+    }
+    checkToken(response.status);
+    count++;
   }
-})
-  .then(function (response) {
-    console.log(response)
-    return response.json();
-  })
-  .then(function (json) {
-    console.log(json);
+  
+  let data = await response.json();
+  console.log(data);
+  // we should be fetching the genre array each time 
+  // what if they update their database and add/remove etc?
 
+  // getting each genre element and pushing to the global array genres
+  for (var i = 0; i < data.genres.length; i++) {
+    var genredownload = data.genres[i].trim();
 
-    // we should be fetching the genre array each time 
-    // what if they update their database and add/remove etc?
+    genres.push(genredownload);
+  }
 
-    // getting each genre element and pushing to the global array genres
-    for (var i = 0; i < json.genres.length; i++) {
-      var genredownload = json.genres[i].trim();
+  console.log(genres);
 
-      genres.push(genredownload);
-    }
+  // clearing dropdown
+  $('#genre-dropdown').html('');
+  // adding a placeholder
+  var placeholderEl = $("<option>");
+  placeholderEl.text("Select");
+  $('#genre-dropdown').append(placeholderEl);
 
-    console.log(genres);
-
-    // clearing dropdown
-    $('#genre-dropdown').html('');
-    // adding a placeholder
-    var placeholderEl = $("<option>");
-    placeholderEl.text("Select");
-    $('#genre-dropdown').append(placeholderEl);
-
-    // printing and appending each genre to the dropdown menu
-    for (var i = 0; i < genres.length; i++) {
-      var optionsEl = $("<option>");
-      optionsEl.text(genres[i]);
-      $('#genre-dropdown').append(optionsEl);
-    }
+  // printing and appending each genre to the dropdown menu
+  for (var i = 0; i < genres.length; i++) {
+    var optionsEl = $("<option>");
+    optionsEl.text(genres[i]);
+    $('#genre-dropdown').append(optionsEl);
+  }
 
     return genres;
-  })
+}
+
+
 
