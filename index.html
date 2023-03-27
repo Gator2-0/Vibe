@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="/assets/css/reset.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
     <title>Vibe</title>
 </head>
 <header>
@@ -21,7 +24,7 @@
         </p>
     </div>
     <!-- Search input box -->
-    <div class="select is-success is-rounded is-medium">
+    <div class="select is-success is-rounded is-medium" id="search-dropdown">
         <select class="drop-down-menu is-offset-one-quarter is-6 is-parent column has-text-centered" id="genre-dropdown">
         </select>
       </div>
@@ -44,7 +47,7 @@
     <article class="tile is-child box" id="genre-main-content">
         <p class="title" id="feature-artist-title">Top Artists</p>
     </article>
-    <div class="tile is-parent">
+    <div class="tile is-parent" id="feature-artist-box">
         <article class="tile is-child box has-background-danger is-size-5">
           <div class="content">
             <!-- Feature Artist Heading -->
