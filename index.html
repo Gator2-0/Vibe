@@ -21,30 +21,21 @@
         </p>
     </div>
     <!-- Search input box -->
-    <div class="columns is-mobile field has-addons is-gapless">
-        <div class="column is-5 is-offset-one-quarter control">
-    <!-- <input class="input is-medium" type="text" placeholder="Choose a Genre!" id="genre-search"> -->
-    <p class="title">Choose a Genre!</p>
-    </div>
-    <div class="select is-success is-size-5">
-        <select class="drop-down-menu" id="genre-dropdown">
-          <option>Select</option>
-          <option>With options</option>
+    <div class="select is-success is-rounded is-medium">
+        <select class="drop-down-menu is-offset-one-quarter is-6 is-parent column has-text-centered" id="genre-dropdown">
         </select>
       </div>
-    </div>
 </section>
 <!-- navigation bar -->
     <nav class="navbar is-primary">
         <div id="navbarBasic" class="navbar-menu">
         <div class="navbar-start">
-        <a class="navbar-item" id="home-btn">
-             Home
+        <a class="navbar-item" id="lastsearch-btn">
+            Last Search
         </a>
-        <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link"  id="more-btn">
-            More
-        </a>
+        <a class="navbar-item" id="random-btn">
+            Random Genre
+       </a>
 </header>
 <!-- Main body of text -->
 <!-- Content Box -->
@@ -57,9 +48,9 @@
         <article class="tile is-child box has-background-danger is-size-5">
           <div class="content">
             <!-- Feature Artist Heading -->
-            <p class="title" id="feature-artist-title">Feature Tab</p>
+            <p class="title" id="feature-artist-title">A Growing Artist</p>
             <!-- Feature Artist Content -->
-            <p class="subtitle" id="feature-artist-info">With even more content</p>
+            <p class="subtitle" id="feature-artist-info"></p>
             <!-- Feature Artist image/content -->
             <div class="content" id="feature-artist-img">
           </div>
