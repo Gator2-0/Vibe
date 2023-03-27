@@ -13,13 +13,13 @@ url += '&client_id=' + encodeURIComponent(client_id);
 url += '&scope=' + encodeURIComponent(scope);
 url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
 
-function getToken(){
-  if(!localUrl.includes('#')){
-  console.log('The url does not contain a #');
-  location.href = url;
-  }else{
-  console.log('The token is present')
-  } 
+function getToken() {
+  if (!localUrl.includes('#')) {
+    console.log('The url does not contain a #');
+    location.href = url;
+  } else {
+    console.log('The token is present')
+  }
   var search = location.hash.substring(1);
   console.log(search);
   var urlHash = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
@@ -51,7 +51,65 @@ async function checkToken(){
 
 // top 10 artist functionality
 
+async function getTopArtist() {
 
+  var baseGenreURL = 'https://api.spotify.com/v1/search/?q=genre:';
+  var genrechoice = $('#genre-dropdown').val();
+  var topQuery = '&type=artist&popularity=100';
+
+  var genreRequestURL = baseGenreURL + genrechoice + topQuery;
+
+  let response = await fetch(genreRequestURL, {
+    headers: {
+      'Authorization': 'Bearer ' + authToken,
+      'Content-Type': 'application/json'
+    }
+  });
+  let data = await response.json();
+  console.log(data);
+
+  var topResultsEl = $('#genre-main-content');
+
+  topResultsEl.html("");
+
+  var topHeaderEl = $('<h2 class = "title">');
+  topHeaderEl.text("Top Artists in " + genrechoice);
+  topResultsEl.append(topHeaderEl);
+
+
+  //get details from the artists and append 
+  for (var i = 0; i < data.artists.items.length; i++) {
+    let topArtist = data.artists.items[i].name;
+    var topArtistgenres = data.artists.items[i].genres;
+    var imgUrl = data.artists.items[i].images[0].url;
+    var profileArtistURL = data.artists.items[i].external_urls.spotify;
+
+    console.log(topArtist);
+
+    // create artist card + append
+    var artistCard = $('<div class = "content">');
+    topResultsEl.append(artistCard);
+
+    // create title + all elements & append to artist card
+    var artistImgEl = $('<img>');
+    artistImgEl.attr("src", imgUrl);
+    artistCard.append(artistImgEl);
+
+    var topArtistNameEl = $('<p class="title">');
+    topArtistNameEl.text(topArtist);
+    artistCard.append(topArtistNameEl);
+
+    var topArtistgenreEl = $('<p class="subtitle">');
+    topArtistgenreEl.text('Related Genres: '+ topArtistgenres);
+    artistCard.append(topArtistgenreEl);
+
+    var profileArtistEl = $('<a class="subtitle">');
+    profileArtistEl.text('Artist profile: ' + profileArtistURL);
+    profileArtistEl.attr('href', profileArtistURL);
+    artistCard.append(profileArtistEl);
+
+  }
+}
 
 
 
@@ -61,7 +119,6 @@ async function checkToken(){
 
 
 //unique artist functionality
-
 
 async function getUniqueArtist(genre) {
   
@@ -74,7 +131,7 @@ async function getUniqueArtist(genre) {
   while(count <= 3){
     response = await fetch('https://api.spotify.com/v1/search/?q=genre:'+genre+'&type=track&offset=300', {
     headers: {
-      'Authorization': 'Bearer '+ authToken,
+      'Authorization': 'Bearer ' + authToken,
       'Content-Type': 'application/json'
     }
   });
@@ -94,6 +151,7 @@ async function getUniqueArtist(genre) {
   console.log(track);
   //get details from the track
 
+
   let artist = $("<p>").text(track.album.artists[0].name);
   let album = $("<p>").text(track.album.name);
   let image = $("<img>").attr('src',track.album.images[1].url) ;
@@ -103,6 +161,7 @@ async function getUniqueArtist(genre) {
   $('#feature-artist-title').append(artist,album);
   $('#feature-artist-img').append(image);
   $('#feature-artist-info').append(externalUrl)
+
 }
 
 
@@ -125,24 +184,61 @@ checkToken();
 
 
 
+
+// global array to push genres into from fetch
+var genres = [];
+
+// event listener for top artists
+$('#genre-dropdown').on("change", getTopArtist);
+
+
+
 //fetch all genres from Spotify
 fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
-  
+
   headers: {
-    'Authorization': 'Bearer '+authToken,
+    'Authorization': 'Bearer ' + authToken,
     'Content-Type': 'application/json',
   }
 })
-.then(function (response) {
-  console.log(response)
-  return response.json();
-})
-.then(function (json) {
-  console.log(json);
-})
+  .then(function (response) {
+    console.log(response)
+    return response.json();
+  })
+  .then(function (json) {
+    console.log(json);
 
 
-// Search autocomplete function:
+    // we should be fetching the genre array each time 
+    // what if they update their database and add/remove etc?
+
+    // getting each genre element and pushing to the global array genres
+    for (var i = 0; i < json.genres.length; i++) {
+      var genredownload = json.genres[i].trim();
+
+      genres.push(genredownload);
+    }
+
+    console.log(genres);
+
+    // clearing dropdown
+    $('#genre-dropdown').html('');
+    // adding a placeholder
+    var placeholderEl = $("<option>");
+    placeholderEl.text("Select");
+    $('#genre-dropdown').append(placeholderEl);
+
+    // printing and appending each genre to the dropdown menu
+    for (var i = 0; i < genres.length; i++) {
+      var optionsEl = $("<option>");
+      optionsEl.text(genres[i]);
+      $('#genre-dropdown').append(optionsEl);
+    }
+
+    return genres;
+  })
+
+
 $(function () {
   var genres = [
     "acoustic",
@@ -282,3 +378,4 @@ searchBar.on('keypress',function(event){
     getUniqueArtist(searchBar.val());
   }
 })
+
