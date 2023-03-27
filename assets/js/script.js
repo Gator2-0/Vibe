@@ -36,7 +36,7 @@ async function checkToken(){
   });
   let status = await response.status;
 
-  if(status !== 200){
+  if(status == 401){
     console.log('The token has expired. Getting new token now...')
     location.href = url
     var search = location.hash.substring(1);
