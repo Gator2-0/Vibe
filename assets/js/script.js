@@ -27,15 +27,8 @@ function getToken() {
   return urlHash.access_token
 }
 
-async function checkToken(){
-  let response = await fetch('https://api.spotify.com/v1/me',{
-    headers: {
-      'Authorization': 'Bearer '+ authToken,
-      'Content-Type': 'application/json'
-    }
-  });
-  let status = await response.status;
-
+async function checkToken(status){
+ 
   if(status == 401){
     console.log('The token has expired. Getting new token now...')
     location.href = url
@@ -120,12 +113,14 @@ async function getTopArtist() {
 
 //unique artist functionality
 
-async function getUniqueArtist(genre) {
+async function getUniqueArtist() {
   
   $('#feature-artist-title').children().remove();
   $('#feature-artist-title').text('');
   $('#feature-artist-img').children().remove();
   $('#feature-artist-info').text('');
+
+  var genre = $('#genre-dropdown').val();
   let count = 0;
   let response;
   while(count <= 3){
@@ -139,7 +134,7 @@ async function getUniqueArtist(genre) {
     console.log('fetch genre status is '+response.status)
     break;
   }
-  checkToken();
+  checkToken(response.status);
   count ++;
   }
 
@@ -151,11 +146,14 @@ async function getUniqueArtist(genre) {
   console.log(track);
   //get details from the track
 
+  let Header = $('<h2 class = "title">');
+  Header.text("A growing artist in " + genre);
+  $('#feature-artist-title').append(Header);
 
-  let artist = $("<p>").text(track.album.artists[0].name);
+  let artist = $("<p class='title'>").text(track.album.artists[0].name);
   let album = $("<p>").text(track.album.name);
-  let image = $("<img>").attr('src',track.album.images[1].url) ;
-  let externalUrl = $("<a>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
+  let image = $("<img>").attr('src',track.album.images[0].url) ;
+  let externalUrl = $("<a class='subtitle'>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
   externalUrl.text('Spotify page')
   console.log(externalUrl)
   $('#feature-artist-title').append(artist,album);
@@ -163,16 +161,6 @@ async function getUniqueArtist(genre) {
   $('#feature-artist-info').append(externalUrl)
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -190,7 +178,7 @@ var genres = [];
 
 // event listener for top artists
 $('#genre-dropdown').on("change", getTopArtist);
-
+$('#genre-dropdown').on("change", getUniqueArtist);
 
 
 //fetch all genres from Spotify
@@ -237,145 +225,4 @@ fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
 
     return genres;
   })
-
-
-$(function () {
-  var genres = [
-    "acoustic",
-    'afrobeat',
-    'alt-rock',
-    'alternative',
-    'ambient',
-    'anime',
-    'black-metal',
-    'bluegrass',
-    'blues',
-    'bossanova',
-    'brazil',
-    'breakbeat',
-    'british',
-    'cantopop',
-    'chicago-house',
-    'children',
-    'chill',
-    'classical',
-    'club',
-    'comedy',
-    'country',
-    'dance',
-    'dancehall',
-    'death-metal',
-    'deep-house',
-    'detroit-techno',
-    'disco',
-    'drum-and-bass',
-    'dub',
-    'dubstep',
-    'edm',
-    'electro',
-    'electronic',
-    'emo',
-    'folk',
-    'forro',
-    'french',
-    'funk',
-    'garage',
-    'german',
-    'gospel',
-    'goth',
-    'grindcore',
-    'groove',
-    'grunge',
-    'guitar',
-    'happy',
-    'hard-rock',
-    'hardcore',
-    'hardstyle',
-    'heavy-metal',
-    'hip-hop',
-    'holidays',
-    'honky-tonk',
-    'house',
-    'idm',
-    'indian',
-    'indie',
-    'indie-pop',
-    'industrial',
-    'iranian',
-    'j-dance',
-    'j-idol',
-    'j-pop',
-    'j-rock',
-    'jazz',
-    'kids',
-    'latin',
-    'latino',
-    'malay',
-    'mandopop',
-    'metal',
-    'metal-misc',
-    'metalcore',
-    'minimal-techno',
-    'movies',
-    'mpb',
-    'new-age',
-    'new-release',
-    'opera',
-    'pagode',
-    'philippines-opm',
-    'piano',
-    'pop',
-    'pop-film',
-    'post-dubstep',
-    'power-pop',
-    'progressive-house',
-    'psych-rock',
-    'punk',
-    'punk-rock',
-    'r-n-b',
-    'rainy-day',
-    'reggae',
-    'reggaeton',
-    'road-trip',
-    'rock',
-    'rock-n-roll',
-    'rockabilly',
-    'romance',
-    'sad',
-    'salsa',
-    'samba',
-    'sertanejo',
-    'show-tunes',
-    'singer-songwriter',
-    'ska',
-    'sleep',
-    'songwriter',
-    'soul',
-    'soundtracks',
-    'spanish',
-    'study',
-    'summer',
-    'swedish',
-    'synth-pop',
-    'tango',
-    'techno',
-    'trance',
-    'trip-hop',
-    'turkish',
-    'work-out',
-    'world-music',
-  ];
-  $('#genre-search').autocomplete({
-    source: genres, 
-  });
-});
-
-
-searchBar.on('keypress',function(event){
-  console.log(event.which)
-  if(event.which == 13){
-    console.log(searchBar.val());
-    getUniqueArtist(searchBar.val());
-  }
-})
 
