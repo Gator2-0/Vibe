@@ -32,6 +32,10 @@ img {
     font-size: large;
 }
 
+.button{
+    margin-left: 10px;
+}
+
 /* responsiveness not built-into bulma */
 @media screen and (max-width: 992px) {
   }

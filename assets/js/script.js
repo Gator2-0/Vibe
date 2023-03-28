@@ -100,14 +100,12 @@ async function getTopArtist() {
     profileArtistEl.attr('href', profileArtistURL);
     artistCard.append(profileArtistEl);
 
+    let saveButton = $("<button>").addClass('button');
+    saveButton.text('Save to my favourite');
+    artistCard.append(saveButton);
+
   }
 }
-
-
-
-
-
-
 
 
 //unique artist functionality
@@ -115,6 +113,7 @@ async function getTopArtist() {
 async function getUniqueArtist() {
   
   $('#feature-artist-title').children().remove();
+  console.log('title is '+ $('#feature-artist-title').text() )
   $('#feature-artist-title').text('');
   $('#feature-artist-img').children().remove();
   $('#feature-artist-info').text('');
@@ -165,19 +164,26 @@ async function getUniqueArtist() {
 
 // Save the artist to local storage as favourite
 
-function toFavourite(){
+function uniqueToFavourite(){
   let par = $($(event.target).parent()).parent();
   let children =  $(par.children()).children();
-  console.log(children);
+  console.log($(children[0]).text().split(' in ')[1]);
+  let storage = JSON.parse(localStorage.getItem('favouriteArtists'));
+  
+  if(!storage){
+    storage =[];
+  }
   let card = {
-    genre: $(children[0]).text().split('Artist')[1],
+    genre: $(children[0]).text().split(' in ')[1],
     band: $(children[1]).text(),
     album: $(children[2]).text(),
     link: $(children[3]).prop('href'),
     image: $(children[5]).prop('src')
 
-  }
-  localStorage.setItem('favouriteArtists', JSON.stringify(card))
+  } 
+  storage.push(card);
+  console.log(storage);
+  localStorage.setItem('favouriteArtists', JSON.stringify(storage))
   
 }
 
@@ -199,7 +205,8 @@ getGenre();
 // event listener
 $('#genre-dropdown').on("change", getTopArtist);
 $('#genre-dropdown').on("change", getUniqueArtist);
-$("#feature-artist-info").on('click','button', toFavourite);
+$("#feature-artist-info").on('click','button', uniqueToFavourite);
+
 
 
 //fetch all genres from Spotify
