@@ -6,7 +6,9 @@ img {
     border-radius: 20px;
     height: 350px;
 }
-
+#feature-artist-header{
+    text-align: center;
+}
 #feature-artist-box{
     max-height: 900px;
 }
