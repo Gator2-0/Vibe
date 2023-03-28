@@ -38,21 +38,10 @@ img {
    top: 0;
     
 }
-
-/* responsiveness not built-into bulma */
-@media screen and (max-width: 992px) {
-
-  }
-  
-
   @media screen and (max-width: 768px) {
     #feature-artist-box{
         flex-direction: column;
     }
   }
-  
-
-  @media screen and (max-width: 576px) {
-    }
   
   
