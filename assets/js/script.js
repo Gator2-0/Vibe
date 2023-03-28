@@ -64,7 +64,7 @@ async function getTopArtist() {
 
   topResultsEl.html("");
 
-  var topHeaderEl = $('<h2 class = "title">');
+  var topHeaderEl = $('<h2 class = "title" id = card-header>');
   topHeaderEl.text("Top Artists in " + genrechoice);
   topResultsEl.append(topHeaderEl);
 
@@ -79,7 +79,7 @@ async function getTopArtist() {
     console.log(topArtist);
 
     // create artist card + append
-    var artistCard = $('<div class = "content">');
+    var artistCard = $('<div class = "content" id = main-artist-content>');
     topResultsEl.append(artistCard);
 
     // create title + all elements & append to artist card
@@ -95,7 +95,7 @@ async function getTopArtist() {
     topArtistgenreEl.text('Related Genres: '+ topArtistgenres);
     artistCard.append(topArtistgenreEl);
 
-    var profileArtistEl = $('<a class="subtitle">');
+    var profileArtistEl = $('<a class="subtitle id = artist-link">');
     profileArtistEl.text('Spotify Page');
     profileArtistEl.attr({href: profileArtistURL, target: 'nw', title: 'Opens in a New Window'});
     artistCard.append(profileArtistEl);
@@ -154,7 +154,7 @@ async function getUniqueArtist() {
   let image = $("<img>").attr('src',track.album.images[0].url) ;
   let externalUrl = $("<a class='subtitle'>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
   externalUrl.text('Spotify page')
-  let saveButton = $("<button>").addClass('button');
+  let saveButton = $("<button>").addClass('button is-primary');
   saveButton.text('Save to my favourite');
 
   $('#feature-artist-title').append(artist,album);
