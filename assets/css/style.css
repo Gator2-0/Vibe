@@ -32,13 +32,23 @@ img {
     font-size: large;
 }
 
+#feature-artist-box{
+   display: inline-block;
+   position: sticky;
+   top: 0;
+    
+}
+
 /* responsiveness not built-into bulma */
 @media screen and (max-width: 992px) {
+
   }
   
 
   @media screen and (max-width: 768px) {
-
+    #feature-artist-box{
+        flex-direction: column;
+    }
   }
   
 
