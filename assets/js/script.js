@@ -95,9 +95,9 @@ async function getTopArtist() {
     topArtistgenreEl.text('Related Genres: '+ topArtistgenres);
     artistCard.append(topArtistgenreEl);
 
-    var profileArtistEl = $('<a class="subtitle" id = artist-link>');
-    profileArtistEl.text('Artist profile: ' + profileArtistURL);
-    profileArtistEl.attr('href', profileArtistURL);
+    var profileArtistEl = $('<a class="subtitle id = artist-link">');
+    profileArtistEl.text('Spotify Page');
+    profileArtistEl.attr({href: profileArtistURL, target: 'nw', title: 'Opens in a New Window'});
     artistCard.append(profileArtistEl);
 
   }
