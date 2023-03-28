@@ -22,12 +22,13 @@ If you don't have one simply create one from the spotify
 Once you have an account you can start using this app.
 
 ## Usage
+[**Deployed application**](https://gator2-0.github.io/Vibe/)
 
 To get started, simply select a genre from the dropdown box.
 you can then scroll the top artist and have a look at the rising star.
 There is alink to each artist sotify page and you can also save your favourites artists.
 
-
+![main page](./assets/img/screenshots-main.png)
 
 ## Credits
 
