@@ -33,8 +33,8 @@ There is alink to each artist sotify page and you can also save your favourites 
 ## Credits
 
 The 3 people that have work on this project are:
-- [Salah Dannaoui]()
-- [Adam Day]()
+- [Salah Dannaoui](https://github.com/SalahDannaoui)
+- [Adam Day](https://github.com/Sype7973)
 - [Jeremy Decherat](https://github.com/Gator2-0)
 
 
