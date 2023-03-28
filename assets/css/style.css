@@ -11,13 +11,23 @@ img {
     max-height: 900px;
 }
 
+#card-header{
+    text-align: center;
+    font-size: 40px;
+}
+
 #genre-main-content.tile.is-child.box{
     border: 1px;
     border-style: solid;
     border-radius: 10px;
     border-color: hsl(141, 53%, 53%);
 }
-
+#main-artist-content{
+    border: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: hsl(141, 53%, 53%);
+}
 .content{
     font-family: 'Raleway', sans-serif;
     padding: 10px;
@@ -32,11 +42,28 @@ img {
     font-size: large;
 }
 
+#artist-link{
+    font-weight: bold;
+}
+
+#artist-link :hover{
+    color: hsl(217, 71%, 53%);
+}
+
+.button{
+    margin-left: 10px;
+    display: inline-block;
+}
 #feature-artist-box{
    display: inline-block;
    position: sticky;
    top: 0;
     
+}
+
+#feature-artist-info{
+    font-size: 30px;
+    font-weight: bolder;
 }
   @media screen and (max-width: 768px) {
     #feature-artist-box{
