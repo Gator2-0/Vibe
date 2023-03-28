@@ -225,11 +225,11 @@ var genres = [];
 getGenre();
 
 // event listener
-$('#genre-dropdown').on("change", getTopArtist);
-$('#genre-dropdown').on("change", getUniqueArtist);
+$('#genre-dropdown').change(getTopArtist);
+$('#genre-dropdown').change(getUniqueArtist);
 $("#feature-artist-info").on('click','button', uniqueToFavourite);
 $("#genre-main-content").on('click', 'button',  toFavourite)
-
+$("#random-btn").on('click', getRandomGenre);
 
 //fetch all genres from Spotify
 
@@ -284,6 +284,12 @@ async function getGenre(){
 }
 
       
+function getRandomGenre(){
+  let randomGenres = genres[Math.floor(Math.random()*genres.length)]; 
+  $('#genre-dropdown').val(randomGenres);
+  getTopArtist();
+  getUniqueArtist();
+}
 
 
 
