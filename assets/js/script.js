@@ -187,6 +187,28 @@ function uniqueToFavourite(){
   
 }
 
+function toFavourite(){
+  let siblings = $(event.target).siblings()
+  console.log(siblings)
+
+  let storage = JSON.parse(localStorage.getItem('favouriteArtists'));
+  
+  if(!storage){
+    storage =[];
+  }
+  let card = {
+    genre: $(siblings[2]).text().split('Genres: ')[1],
+    band: $(siblings[1]).text(),
+    album: '',
+    link: $(siblings[3]).prop('href'),
+    image: $(siblings[0]).prop('src')
+
+  } 
+  storage.push(card);
+  console.log(storage);
+  localStorage.setItem('favouriteArtists', JSON.stringify(storage))
+}
+
 
 
 
@@ -206,7 +228,7 @@ getGenre();
 $('#genre-dropdown').on("change", getTopArtist);
 $('#genre-dropdown').on("change", getUniqueArtist);
 $("#feature-artist-info").on('click','button', uniqueToFavourite);
-
+$("#genre-main-content").on('click', 'button',  toFavourite)
 
 
 //fetch all genres from Spotify
