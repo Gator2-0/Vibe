@@ -261,10 +261,10 @@ async function getGenre(){
     return genres;
 }
 
+      
 
 
 
-    $(window).scroll(function(){
-      $("#feature-artist-box").css({"margin-top": ($(window).scrollTop()) + "px", "margin-left":($(window).scrollLeft()) + "px"});
-    });
+  
+
 
