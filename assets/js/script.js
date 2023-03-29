@@ -100,7 +100,7 @@ async function getTopArtist() {
     profileArtistEl.attr({href: profileArtistURL, target: 'nw', title: 'Opens in a New Window'});
     artistCard.append(profileArtistEl);
 
-    let saveButton = $("<button>").addClass('button is-primary');
+    let saveButton = $("<button>").addClass('button is-primary is-size-5');
     saveButton.text('Save to my favourite');
     artistCard.append(saveButton);
 
@@ -153,7 +153,7 @@ async function getUniqueArtist() {
   let image = $("<img>").attr('src',track.album.images[0].url) ;
   let externalUrl = $("<a class='subtitle'>").attr({href: track.external_urls.spotify, target: 'nw', title:'Opens in new windows'});
   externalUrl.text('Spotify page')
-  let saveButton = $("<button>").addClass('button is-primary');
+  let saveButton = $("<button>").addClass('button is-primary is-size-5');
   saveButton.text('Save to my favourite');
 
   $('#feature-artist-title').append(artist,album);
