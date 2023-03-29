@@ -2,12 +2,18 @@
     display: none;
 }
 img {
-    width: 400px;
+    display: block;
+    width: 50%;
     border-radius: 20px;
-    height: 350px;
+    max-height: 50%;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    
 }
 #feature-artist-header{
     text-align: center;
+    font-size: 40px;
 }
 #feature-artist-box{
     max-height: 900px;
@@ -17,7 +23,10 @@ img {
     text-align: center;
     font-size: 40px;
 }
-
+#top-artist-header{
+    text-align: center;
+    font-size: 40px;
+}
 #genre-main-content.tile.is-child.box{
     border: 1px;
     border-style: solid;
@@ -46,12 +55,17 @@ img {
 
 #artist-link{
     font-weight: bold;
+    display: inline-block;
 }
 
 #artist-link :hover{
     color: hsl(217, 71%, 53%);
 }
 
+.button.is-primary{
+    display: inline-block;
+    margin-bottom: 10px;
+}
 .button{
     margin-left: 10px;
     display: inline-block;
@@ -60,7 +74,6 @@ img {
    display: inline-block;
    position: sticky;
    top: 0;
-    
 }
 
 #feature-artist-info{
