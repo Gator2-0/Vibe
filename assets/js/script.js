@@ -87,7 +87,7 @@ async function getTopArtist() {
     artistImgEl.attr("src", imgUrl);
     artistCard.append(artistImgEl);
 
-    var topArtistNameEl = $('<p class="title">');
+    var topArtistNameEl = $('<p class="title" id = top-artist-header>');
     topArtistNameEl.text(topArtist);
     artistCard.append(topArtistNameEl);
 
@@ -100,7 +100,7 @@ async function getTopArtist() {
     profileArtistEl.attr({href: profileArtistURL, target: 'nw', title: 'Opens in a New Window'});
     artistCard.append(profileArtistEl);
 
-    let saveButton = $("<button>").addClass('button');
+    let saveButton = $("<button>").addClass('button is-primary');
     saveButton.text('Save to my favourite');
     artistCard.append(saveButton);
 
@@ -283,7 +283,7 @@ async function getGenre(){
     return genres;
 }
 
-      
+    //gets Random genre and runs render functions 
 function getRandomGenre(){
   let randomGenres = genres[Math.floor(Math.random()*genres.length)]; 
   $('#genre-dropdown').val(randomGenres);
