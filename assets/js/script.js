@@ -2,7 +2,8 @@
 let searchBar = $("#genre-search");
 //Get authentification Token from Spotify
 const client_id = 'bb72931649ec425d94a20764ae59cb49';
-const redirect_uri = 'http://127.0.0.1:5500/index.html';
+//const redirect_uri = 'http://127.0.0.1:5500/index.html';
+const redirect_uri  = location.href;
 const scope = 'user-read-private user-read-email';
 let localUrl = location.href;
 
@@ -213,9 +214,11 @@ function toFavourite(){
 
 
 //start
+console.log('location at first is '+location.href)
 authToken = getToken();
 console.log(authToken);
 checkToken();
+console.log('Location after token is '+location.href)
 
 
 

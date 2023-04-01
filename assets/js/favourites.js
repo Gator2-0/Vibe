@@ -3,9 +3,11 @@ function printFavourites() {
 
 
     var storedFavs = JSON.parse(localStorage.getItem('favouriteArtists'));
+
     var favslistEl = $('#genre-main-content');
 
     for (var i = 0; i < storedFavs.length; i++) {
+        
         let favArtist = storedFavs[i].band;
         var favAlbum = storedFavs[i].album;
         var favGenre = storedFavs[i].genre;
